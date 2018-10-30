@@ -1,0 +1,119 @@
+@import "bourbon";
+
+$primary-color: hsl(350, 70, 60);
+
+.slides {
+  position: relative;
+  @extend .cf;
+
+  .slide {
+    position: absolute;
+    top: 0; // Have to declare this for transition: top to work
+    width: calc(33% - 1em);
+    max-height: 3.5em; // Kind of a magic number
+    margin: 0.5em;
+    padding: 1em;
+    background: darken($primary-color, 20%);
+    color: white;
+    float: left;
+    overflow: hidden;
+    
+    transition: max-height 0.25s       ease-in-out,
+                width      0.25s 0.25s ease-in-out,
+                left       0.25s 0.5s  ease-in-out,
+                top        0.25s 0.75s ease-in-out;
+    
+    // This is probably the jankiest part
+    @for $i from 1 through 3 {
+      &:nth-child(#{$i}) {
+        left: #{($i - 1) * 33.3333%};
+      }
+    }
+ 
+    
+    > a {
+      display: block;
+      padding-bottom: 1em;
+      font-family: 'Oswald';
+      text-transform: uppercase;
+      text-decoration: none;
+      color: lighten($primary-color, 15%);
+      transition: color 2s;
+    }
+  }
+  
+  .slide.active {
+    position: absolute;
+    top: 4.5em;
+    left: 0;
+    width: 100%;
+    max-height: 20em;
+    float: none;
+    
+    transition: top        0.25s 1s    ease-in-out,
+                left       0.25s 1.25s ease-in-out,
+                width      0.25s 1.5s  ease-in-out,
+                max-height 0.25s 1.75s ease-in-out;
+    
+    a { color: white; }
+  }
+}
+
+/** PAGE STYLES **/
+@import url(https://fonts.googleapis.com/css?family=Lato:300|Oswald);
+
+*, *:before, *:after { @include box-sizing(border-box); }
+
+html, body { width: 100%; height: 100%; }
+
+html { font-size: 62.5%; }
+
+body {
+  background: $primary-color;
+  font-family: 'Lato', sans-serif;
+  font-size: 2em; 
+  line-height: 1.5
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0;
+  padding: 1em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2em;
+  text-transform: uppercase;
+  text-align: center;
+  color: lighten(hsl(120, 70, 70), 30%);
+}
+
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
+}

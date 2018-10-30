@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{%load staticfiles%}
+	<title>Admin Panel</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body style="background: #eaeaea;">
+	{%load staticfiles%}
+	<div style="background: rgb(179,220,237); /* Old browsers */
+background: -moz-linear-gradient(-45deg, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 50%, rgba(188,224,238,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, rgba(179,220,237,1) 0%,rgba(41,184,229,1) 50%,rgba(188,224,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, rgba(179,220,237,1) 0%,rgba(41,184,229,1) 50%,rgba(188,224,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ width: 100%; height: 50px;box-shadow: 0px 8px 14px rgba(0,0,0,0.15);">
+		<h3 style="margin-left: 15%; color: white; font-weight: bold; padding-top: 5px;">Nakib's Art Galary</h3>
+
+		<form method="post" action="/logout/">
+			{%csrf_token%}
+			<input style="margin-left: 78%; margin-top: -65px;" class="btn btn-danger" type="submit" name="logout" value="Log Out">
+		</form>
+	</div>
+	<div class="" style="width: 70%; margin: 0 auto; background: white; margin-top: 30px; padding: 30px 20px; border-radius: 5px; box-shadow: 0px 8px 14px rgba(0,0,0,0.15); height: 220px; margin-bottom: 60px;">
+		<h4 style="color: #C03628;">Upload Photo:</h4>
+		<form action="/adminpanel/" method="post" enctype="multipart/form-data">
+			{%csrf_token%}
+			<input style="margin: 10px 0px;"  type="text" name="title" placeholder="Enter image title..." class="form-control">
+			<input type="file" name="image" class="form-control">
+			<input style="margin: 10px 0px;" type="submit" name="sub" class="btn btn-info" value="Submit">
+		</form>	
+	</div>
+	{%for i in userinfo%}
+		<div class="row" style="width: 70%; margin: 0 auto; background: white; margin-top: 30px; padding: 30px 20px; border-radius: 5px; box-shadow: 0px 8px 14px rgba(0,0,0,0.15); height: 530px; margin-bottom: 60px;">
+			
+			<div class="col-md-7" style="">
+			
+			<h4 style="color: #2FBAE5;">{{i.title}}</h4>
+			
+			<hr>
+			
+				{% if i.image %}
+					<img src="{{i.image.url}}" alt="image" style="width: 100%;height: 400px;">
+				{% endif %}
+			
+			</div>
+			<div class="col-md-5" style="position: relative; overflow-y: scroll;">
+				
+				<form method="post" action="/analysis/{{i.title}}/">
+					{%csrf_token%}
+					<input type="submit" name="" class="btn btn-danger form-control" value="Sentiment Analysis Report" style="margin-bottom: 10px;">
+					<input type="hidden" name="title" value="{{i.title}}">
+				</form>
+				
+				<h2 style="color: #7f7f7f;">Comments:</h2>
+				<hr>
+				{% for j in comments %}
+					{% if j.title == i.title %}
+						<h4 style="color: #2AB9E6; font-weight: bold;">{{j.user}}</h4>
+						<h5 class="">{{j.comment}}</h5>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	{%endfor%}
+
+</body>
+</html>

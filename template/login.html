@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	{%load staticfiles%}
+	<link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}"/>
+	<link rel="stylesheet" type="text/css" href="{%static 'sweetalert2/sweetalert2.min.css'%}"/>
+	<link rel="stylesheet" type="text/css" href="{%static 'css/bootstrap.css'%}"/>
+	<script type="text/javascript" src="{% static 'bal.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'sweetalert2/sweetalert2.min.js' %}"></script>
+</head>
+<body>
+	<div class="form">
+		<h1 id="test"> </h1>
+		<h4 style="color:orange;">Login Here</h4>
+		<form method="post" action="">
+			{% csrf_token %}
+			<label for="us">Username:</label>
+			<input id="us" class="form-control inp" type="text" name="use" placeholder="Enter username...">
+			<label for="pass">Password:</label>
+			<input id="pass" class="form-control inp" type="password" name="pass" placeholder="Enter Password...">
+			<input id="bal" class="btn btn-primary inp" type="submit" value="Log in">
+		</form>
+		
+	</div>
+<script type="text/javascript">
+			$(document).ready(function(){
+				$("#bal").click(function(){
+					//alert("Hello adil");
+					
+					//alert(datastring);
+					
+					$.ajax({
+						type:"POST",
+						url:"/login/",
+						data:{
+							'use':$("#us").val(),
+							'pass':$("#pass").val(),
+							'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()
+						},
+						dataType:'json',
+						success:function(dic){
+							if(dic.varr == 1){
+								swal('Welcome','Authentication Successful!','success');
+								//userfunction();
+								setTimeout(function(){ window.location.href='/adminpanel/' },2000);
+
+							}
+							else{
+								swal('Sorry!!','Authentication Failed!','error');
+							}
+						},
+						
+						
+						
+					});
+					return false;
+					
+				});
+				
+				
+			});
+
+			/*function nakib(var x) {
+				if(x==1){
+					document.getElementById('test').innerHTML="Hello Success";
+				}
+			}*/
+	  </script>
+	  <script type="text/javascript">
+	  	function userfunction(){
+	  		document.getElementById('test').innerHTML="Hello Success";
+	  	}
+	  </script>
+	<!--<div onload="ajax1()" id="result" style="width: 300px; margin: 0 auto; margin-top: -100px;">
+	{% if varr == 1 %}
+			<h1 id="gr" style="margin-left: 70px; color: green;">Success!</h1>
+			<script language="javascript">
+						
+						 setTimeout(function(){ 
+							window.location.href='/adminpanel/' 
+					 },1000); 
+					
+					</script>
+	{% endif %}
+		{% if varr == 0 %}
+			<h3  id="rd" style="color: red;">Username or Password is not correct!!</h3>
+		{% endif %}
+	</div>-->
+</body>
+</html>
